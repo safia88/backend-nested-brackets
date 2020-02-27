@@ -7,16 +7,45 @@ __author__ = "???"
 
 import sys
 
+ndict = {
+    '*)': '(*',
+    ')': '(',
+    ']': '[',
+    '}': '{',
+    '>': '<'
+}
+
 
 def is_nested(line):
-    """Validate a single input line for correct nesting"""
-    pass
+    count = 0
+    nlist = []
+    while line:
+        token = line[0]
+        if line.startswith("(*"):
+            token = "(*"
+        if line.startswith("*)"):
+            token = "*)"
+        count += 1
+        if token in ndict.values():
+            nlist.append(token)
+        elif token in ndict.keys():
+            a = ndict[token]
+            b = nlist.pop()
+            if a != b:
+                return "NO " + str(count)
+        line = line[len(token):]
+    if nlist:
+        return "NO " + str(count)
+    else:
+        return "YES"
 
 
 def main(args):
-    """Open the input file and call `is_nested()` for each line"""
-    # Results: print to console and also write to output file
-    pass
+    with open('input.txt', 'r') as f:
+        with open('output.txt', 'w') as w:
+            for line in f:
+                result = is_nested(line)
+                w.write(result+'\n')
 
 
 if __name__ == '__main__':
